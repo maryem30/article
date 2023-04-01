@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/")
+ * @Route("/user")
  */
 class UserController extends AbstractController
 {
@@ -19,34 +19,39 @@ class UserController extends AbstractController
 
 
     /**
-     * @Route("/{id}/user/edit", name="app_user_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="app_user_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-        $error = false;
-        if ($form->isSubmitted() && $form->isValid()) {
+        if( $user == $this->get('security.token_storage')->getToken()->getUser()){
+            $form = $this->createForm(UserType::class, $user);
+            $form->handleRequest($request);
+            $error = false;
+            if ($form->isSubmitted() && $form->isValid()) {
 
-            $found = $userRepository->findOneBy(['username' => $form->getData()->getUsername()]);
-            if ($found &&$form->getData()->getId() != $found->getId() ){
-                $error =true;
-                return $this->render('user/edit.html.twig', [
-                    'user' => $user,
-                    'form' => $form->createView(),
-                    'error' => $error,
-                    'message' => "Username exists"]);
+                $found = $userRepository->findOneBy(['username' => $form->getData()->getUsername()]);
+                if ($found &&$form->getData()->getId() != $found->getId() ){
+                    $error =true;
+                    return $this->render('user/edit.html.twig', [
+                        'user' => $user,
+                        'form' => $form->createView(),
+                        'error' => $error,
+                        'message' => "Username exists"]);
+                }
+                $userRepository->add($user);
+                return $this->redirectToRoute('app_home');
             }
-            $userRepository->add($user);
+
+            return $this->render('user/edit.html.twig', [
+                'user' => $user,
+                'form' => $form->createView(),
+                'error' => $error,
+                'message' => "Username exists"
+            ]);
+        }else{
             return $this->redirectToRoute('app_home');
         }
 
-        return $this->render('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form->createView(),
-            'error' => $error,
-            'message' => "Username exists"
-        ]);
     }
 
 }
