@@ -16,8 +16,7 @@ class UserFormType extends AbstractType
             ->add('username')
             ->add('firstName')
             ->add('lastName')
-            ->add('password', PasswordType::class)
-        ;
+            ->add('password', PasswordType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

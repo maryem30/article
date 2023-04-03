@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">
+            Article
+        </h3>
+        <div class="card-body">
+            <table class="table table-hover">
+                <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ article.id }}</td>
+                </tr>
+                <tr>
+                    <th>Title</th>
+                    <td>{{ article.Title }}</td>
+                </tr>
+                <tr>
+                    <th>Content</th>
+                    <td>{{ article.Content }}</td>
+                </tr>
+                <tr>
+                    <th>DeletedAt</th>
+                    <td>{{ article.deletedAt ? article.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <a href="{{ path('app_article_index') }}">back to list</a>
+    </div>
+{% endblock %}

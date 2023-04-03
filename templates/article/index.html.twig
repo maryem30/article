@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article index{% endblock %}
+
+{% block body %}
+    {% if success %}
+        <br>
+        <div class="alert alert-success">{{ message }}</div>
+        <br>
+    {% endif %}
+    <div class="card">
+        <h3 class="card-header">
+            My articles
+        </h3>
+        <div class="card-body">
+            <a class="btn btn-primary new" href="{{ path('app_article_new') }}">Create new</a>
+            <br>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for article in articles %}
+                    <tr>
+                        <td>{{ article.id }}</td>
+                        <td>{{ article.Title }}</td>
+                        <td>{{ article.Content|slice(0, 30) ~ '...' }}</td>
+                        <td>
+                            <a href="{{ path('app_article_show', {'id': article.id}) }}"><i
+                                        class="bi bi-search"></i></a>
+                            <a href="{{ path('app_article_edit', {'id': article.id}) }}"><i
+                                        class="bi bi-pencil-square green"></i></a>
+                            <a href="{{ path('app_article_delete', {'id': article.id}) }}"><i
+                                        class="bi bi-trash red"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

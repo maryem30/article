@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block title %}Home page{% endblock %}
 {% block body %}
+    {% if success %}
+        <br>
+        <div class="alert alert-success">{{ message }}</div>
+        <br>
+    {% endif %}
     <div class="title m-b-md">
         Welcome
     </div>
@@ -8,7 +13,8 @@
     <div>
         {% if is_granted('ROLE_USER') %}
             <p>
-                <a href="{{ path('app_user_edit' , {'id' :  app.user.id}) }}">Edit Profile</a>
+                <a class="btn btn-dark" href="{{ path('app_user_edit' , {'id' :  app.user.id}) }}">Edit Profile</a>
+                <a class="btn btn-info" href="{{ path('app_article_index') }}">My articles</a>
             </p>
         {% endif %}
     </div>

@@ -1,0 +1,23 @@
+<div class="card">
+    <h3 class="card-header">
+        My article
+    </h3>
+    <div class="card-body">
+        <form method="POST">
+            {{ form_start(form) }}
+            <div class="form-group">
+                <label for="exampleInputEmail1">Title</label>
+                {{ form_widget(form.title, {'attr': {'class': 'form-control' }}) }}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Content</label>
+                {{ form_widget(form.content, {'attr': {'class': 'form-control' }}) }}
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+            {{ form_end(form) }}
+        </form>
+        <br>
+
+        <a href="{{ path('app_article_index') }}">back to list</a>
+    </div>
+</div>

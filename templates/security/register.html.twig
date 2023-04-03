@@ -5,21 +5,37 @@
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 {% endblock %}
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
+    <div class="card">
+        <h3 class="card-header">
+           Registration
+        </h3>
+        <div class="card-body">
+            <form method="POST">
                 {{ form_start(registrationForm) }}
-                {{ form_widget(registrationForm) }}
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Username</label>
+                    {{ form_widget(registrationForm.username, {'attr': {'class': 'form-control' }}) }}
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">First name</label>
+                    {{ form_widget(registrationForm.firstName, {'attr': {'class': 'form-control' }}) }}
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Last name</label>
+                    {{ form_widget(registrationForm.lastName, {'attr': {'class': 'form-control' }}) }}
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    {{ form_widget(registrationForm.password, {'attr': {'class': 'form-control' }}) }}
+                </div>
                 {% if error %}
                     <br>
                     <div class="alert alert-danger"><span>{{ message }}</span></div>
                     <br>
                 {% endif %}
-                <button class="btn btn-lg btn-primary btn-block" type="submit">
-                    Register
-                </button>
+                <button type="submit" class="btn btn-primary"> Register</button>
                 {{ form_end(registrationForm) }}
-            </div>
-        </div>
+            </form>
+    </div>
     </div>
 {% endblock %}

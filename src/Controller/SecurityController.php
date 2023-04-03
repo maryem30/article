@@ -18,7 +18,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="app_login")
      */
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
@@ -29,7 +29,7 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'success' => $request->query->get('success'), 'message' => $request->query->get('message')]);
     }
 
     /**
@@ -39,23 +39,23 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
+
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler,UserRepository $userRepository)
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, UserRepository $userRepository)
     {
         $form = $this->createForm(UserFormType::class);
         $form->handleRequest($request);
-       $error=false;
+        $error = false;
         if ($form->isSubmitted() && $form->isValid()) {
-
             $found = $userRepository->findOneBy(['username' => $request->request->get('user_form')['username']]);
-            if ($found){
-                $error =true;
+            if ($found) {
+                $error = true;
                 return $this->render('security/register.html.twig', [
                     'registrationForm' => $form->createView(),
                     'error' => $error,
-                    'message' => "Username exists"  ]);
+                    'message' => "Username exists"]);
             }
             $user = $form->getData();
             $user->setRoles(['ROLE_USER']);
@@ -63,14 +63,16 @@ class SecurityController extends AbstractController
                 $user,
                 $user->getPassword()
             ));
-           $em= $this->getDoctrine()->getManager();
-           $em->persist($user);
-           $em->flush();
-           return $this->redirectToRoute('app_login');
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            return $this->redirectToRoute('app_login', ['success' => true, 'message' => 'Account created successfully']);
         }
+
         return $this->render('security/register.html.twig', [
             'registrationForm' => $form->createView(),
             'error' => $error,
-        'message' => "Username exists"  ]);
+            'message' => "Username exists"]);
     }
 }

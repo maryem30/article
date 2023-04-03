@@ -1,9 +1,0 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-   {% if error %}
-       <br>
-       <div class="alert alert-danger"><span>{{ message }}</span></div>
-       <br>
-   {% endif %}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
